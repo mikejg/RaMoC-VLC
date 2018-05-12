@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Bilder/banner4.png</file>
+        <file>Bilder/Ramoc_Wallpaper.png</file>
+        <file>Bilder/wallpaper_Music.jpg</file>
+        <file>Bilder/blende.png</file>
+        <file>Bilder/Wallpaper.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,180 @@
+" .vimrc
+" @author: Aaron Mueller <mail@aaron-mueller.de>
+"
+" HISTORY:
+"   2011-09-29: Add the LanguageTool
+"   2010-07-29: Change GUI font
+"   2009-09-18: Clean up
+"   2010-06-05: -
+
+set guifont=Monospace\ 9
+set cindent
+set mouse=a
+set t_Co=256
+syntax enable
+colorscheme fu
+"colorscheme candyman
+let mapleader = ","
+set directory=~/.vim/swp/
+set wildmode=longest,list,full
+set wildmenu
+set statusline=%<%F%h%m%r%h%w%y\ (%{&ff},\ %{(&fenc==\"\"?&enc:&fenc)})\ %=\ %#Question#(%c%V,\ %l)\ %P
+
+" Drucken
+" Options: num
+set printoptions=paper:A4,syntax:y,number:n
+
+set number
+set autoindent
+set smartindent
+filetype plugin indent on
+
+" Passende Klammern anzeigen
+set showmatch
+set showmode
+set showcmd
+
+" Textverhalten
+set shiftwidth=2
+set tabstop=2
+set expandtab
+set linebreak
+
+" Sonderzeichen anzeigen
+"set list
+
+" Texte schreiben mit Absätzen
+" set textwidth=80
+" setl fo=aw2tq
+"au BufEnter *.tex setl tx ts=4 sw=4 fo+=n2a nocindent nosmartindent
+au BufEnter *.tex setl nocindent nosmartindent
+au BufEnter *.rules setl syntax=concat
+au BufWinLeave * mkview
+au BufWinEnter * silent loadview
+
+" Suchen
+set hlsearch
+set incsearch
+set wrapscan
+set ignorecase
+
+set scrolljump=0
+set so=3
+set ls=2
+set backspace=2
+set hidden
+
+" Tabs/Buffer change
+map <M-Right> :bn<CR>
+map <M-Left> :bp<CR>
+
+nmap <C-S-Tab> :tabprevious<CR>
+map <C-S-Tab> :tabprevious<CR>
+imap <C-S-Tab> <Esc>:tabprevious<CR>i
+
+map <C-Tab> :tabnext<CR>
+imap <C-Tab> <Esc>:tabnext<CR>i
+nmap <C-Tab> :tabnext<CR>
+
+nmap <C-M-t> :tabnew<CR>
+imap <C-M-t> <Esc>:tabnew<CR>
+
+nmap <C-M-w> :tabclose<CR>
+imap <C-M-w> :tabclose<CR>
+
+" Fenster
+map + <C-W>+
+map - <C-W>-
+
+" Leisten
+map <F5> :Tlist<CR>
+
+" Rechtschreibpruefung
+let g:myLang = 1
+let g:myLangList = [ "Off", "German", "English" ]
+function! ChangeSpellLang()
+  if g:myLang == 0 | set nospell | endif
+  if g:myLang == 1 | setlocal spell spelllang=de_de | endif
+  if g:myLang == 2 | setlocal spell spelllang=en_us | endif
+  echo "language:" g:myLangList[g:myLang]
+  let g:myLang = g:myLang + 1
+  if g:myLang >= len(g:myLangList) | let g:myLang = 0 | endif
+endfunction
+map <F7> :call ChangeSpellLang()<CR>
+
+set complete=.,w,b,u,t,i,kspell
+hi SpellBad ctermbg=52 ctermfg=9
+set spellsuggest=8
+
+" Woerter zaehlen
+" http://www.vim.org/scripts/script.php?script_id=1191
+map <leader>c :WC<CR>
+
+" Color definitions
+hi author ctermbg=black ctermfg=blue
+hi needLineBreak ctermbg=gray
+hi eolWhitespace ctermbg=red
+
+"hi clear CursorLine
+"hi CursorLine ctermbg=233
+"set cursorline
+
+match eolWhitespace /[  |\t]\+$/
+match needLineBreak /.\%>80v/
+match author /\(@[aA]uth\?or: \?\)\@<=[^ ].\+/
+
+" Mark spaces
+highlight ExtraWhitespace ctermbg=darkRed guibg=darkRed
+match ExtraWhitespace /\s\+\%#\@<!$/
+
+" Templates
+function! LoadTemplate()
+  silent! 0r ~/.vim/skel/template.%:e
+  syn match Todo "%\u\+%" containedIn=ALL
+endfunction
+autocmd! BufNewFile * call LoadTemplate()
+nnoremap <C-p> /%\u.\{-1,}%<CR>c/%/e<CR>
+inoremap <C-p> <ESC>/%\u.\{-1,}<CR>c/%/e<CR>
+
+" TODO: Signs marker setzen
+" sign define fixme text=!! linehl=Todo texthl=Error
+"function! SignFixme()
+"  execute(":sign place ".line(".")." line=".line(".")." name=fixme file=".expand("%:p"))
+"endfunction
+"map <M-m> :call SignFixme()<CR>
+
+"set wrap
+"noremap $ g$
+"noremap j gj
+"noremap k gk
+"noremap 0 g0
+"noremap ^ g^
+"noremap <end> g<end>
+"noremap <home> g<home>
+"noremap <up> g<up>
+"noremap <down> g<down>
+
+nnoremap <silent> <M-b> :FufBuffer<CR>
+nnoremap <silent> <M-f> :FufFile<CR>
+nnoremap <silent> <M-g> :FufDir<CR>
+
+" Language Stuff
+let g:languagetool_jar=$HOME.'/.vim/vendor/LanguageTool-1.5/LanguageTool.jar'
+map <F8> :LanguageToolCheck<CR>
+set clipboard=unnamed
+
+" Thesaurus
+set thesaurus=~/.vim/vendor/thesaurus_de.txt
+"set thesaurus+=~/.vim/vendor/thesaurus_en.txt
+
+" Translation
+let g:trv_dictionary='~/.vim/vendor/de-en.txt'
+
+" GUI Stuff
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+
+let NERDTreeIgnore=['\.o$', '^moc_']
+autocmd VimEnter * NERDTree
+au QuickFixCmdPre * wall

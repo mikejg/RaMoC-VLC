@@ -1,0 +1,125 @@
+### Einloggen in mysql ###
+mysql -p -u root
+Passwort ramoc
+
+### Datenbank und User erstellen ###
+mysql> create database ramoc;
+mysql> use ramoc;
+mysql> GRANT ALL ON ramoc .* TO ramocuser@localhost IDENTIFIED BY 'ramoc';
+# Für remote zugriff #
+mysql> GRANT ALL ON ramoc .* TO ramocuser@'%' IDENTIFIED BY 'ramoc';
+
+mysql> FLUSH PRIVILEGES;
+mysql> quit;
+
+in /etc/mysql/my.cnf bind_address auskommentieren
+
+### Neu einloggen ###
+mysql -p -u ramocuser
+Passwort ramoc
+
+### Datenbank anwählen ###
+mysql> use ramoc;
+
+### Tabellen erstellen ###
+mysql> CREATE TABLE t_Person (id INTEGER NOT NULL, name VARCHAR(255), PRIMARY KEY (id));
+mysql> CREATE TABLE t_Regie (id INTEGER NOT NULL, regie  VARCHAR(255), PRIMARY KEY (id))
+mysql> CREATE TABLE t_Genre (id INTEGER NOT NULL, genre1 VARCHAR(255),genre2 VARCHAR(255),genre3 VARCHAR(255),genre4 VARCHAR(255), PRIMARY KEY (id));
+mysql> CREATE TABLE t_Datei (id INTEGER NOT NULL, dateiname  VARCHAR(255), PRIMARY KEY (id));
+mysql> CREATE TABLE t_Film(id INTEGER NOT NULL, titel VARCHAR(255), beschreibung VARCHAR(4048), regie INTEGER, fsk INTEGER, jahr INTEGER, genre1 INTEGER, genre2 INTEGER, genre3 INTEGER, genre4 INTEGER, cover MEDIUMBLOB, FOREIGN KEY (regie) REFERENCES t_Regie (id), FOREIGN KEY (genre1) REFERENCES t_Genre (id), FOREIGN KEY (genre2) REFERENCES t_Genre (id), FOREIGN KEY (genre3) REFERENCES t_Genre (id), FOREIGN KEY (genre4) REFERENCES t_Genre (id), PRIMARY KEY (id));
+
+mysql> CREATE TABLE t_Datei_Film(id INTEGER NOT NULL, film INTEGER, datei INTEGER, FOREIGN KEY (film) REFERENCES t_Film (id), FOREIGN KEY (datei) REFERENCES t_Datei (id), PRIMARY KEY (id));
+
+CREATE TABLE t_Darsteller_Film(id INTEGER NOT NULL, film INTEGER, person INTEGER, rolle VARCHAR(255), FOREIGN KEY (film) REFERENCES t_Film (id), FOREIGN KEY (person) REFERENCES t_Person (id), PRIMARY KEY (id));
+
+select t_Film.id, titel, g1.genre1, g2.genre2 from t_Film INNER JOIN t_Genre AS g1 ON t_Film.genre1 = g1.id INNER JOIN t_Genre AS g2 ON t_Film.genre2 = g2.id WHERE t_Film.id = 1;
+
++----+-------+--------+----------+
+| id | titel | genre1 | genre2   |
++----+-------+--------+----------+
+|  1 | 21    | Drama  | Thriller |
++----+-------+--------+----------+
+
++-----------------+
+| Tables_in_ramoc |
++-----------------+
+| t_Datei         |
+| t_Datei_Film    |
+| t_Film          |
+| t_Genre         |
+| t_Person        |
+| t_Person_Film   |
+| t_Regie         |
++-----------------+
+
+t_Datei
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| id        | int(11)      | NO   | PRI | NULL    |       |
+| dateiname | varchar(255) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+
+t_Film
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| id           | int(11)       | NO   | PRI | NULL    |       |
+| titel        | varchar(255)  | YES  |     | NULL    |       |
+| beschreibung | varchar(2048) | YES  |     | NULL    |       |
+| regie        | int(11)       | YES  | MUL | NULL    |       |
+| fsk          | int(11)       | YES  |     | NULL    |       |
+| jahr         | int(11)       | YES  |     | NULL    |       |
+| genre1       | int(11)       | YES  | MUL | NULL    |       |
+| genre2       | int(11)       | YES  | MUL | NULL    |       |
+| genre3       | int(11)       | YES  | MUL | NULL    |       |
+| genre4       | int(11)       | YES  | MUL | NULL    |       |
+| cover        | mediumblob    | YES  |     | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+
+t_Genre
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| id     | int(11)      | NO   | PRI | NULL    |       |
+| genre1 | varchar(255) | YES  |     | NULL    |       |
+| genre2 | varchar(255) | YES  |     | NULL    |       |
+| genre3 | varchar(255) | YES  |     | NULL    |       |
+| genre4 | varchar(255) | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+
+t_Person
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int(11)      | NO   | PRI | NULL    |       |
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+
+t_Person_Film;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| id     | int(11)      | NO   | PRI | NULL    |       |
+| film   | int(11)      | YES  | MUL | NULL    |       |
+| person | int(11)      | YES  | MUL | NULL    |       |
+| rolle  | varchar(255) | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+
+t_Regie;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int(11)      | NO   | PRI | NULL    |       |
+| regie | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+
+t_Datei_Film
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| id    | int(11) | NO   | PRI | NULL    |       |
+| film  | int(11) | YES  | MUL | NULL    |       |
+| datei | int(11) | YES  | MUL | NULL    |       |
++-------+---------+------+-----+---------+-------+
+
