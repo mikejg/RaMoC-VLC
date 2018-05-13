@@ -41,6 +41,7 @@ private:
     QLabel*         label_ChannelIcon;
     QPixmap         pixmap_Main;
     QPixmap         pixmap_Music;
+    QPixmap         pixmap_Black;
     QProgressBar*   progressBar;
     Server*         server;
     DataBase*       database;
@@ -56,10 +57,11 @@ public:
 public slots:
     void onInsertMovie(QString, QString);
     void onInsertMovies();
-    void onMusicStopped();
+    void onVLCStopped();
     void onNewArtistPixmap(QPixmap);
     void onNewInfo(QString);
     void onPlayingTrack(Track);
+    void onSetBlack();
 };
 
 #endif // MAINWINDOW_H

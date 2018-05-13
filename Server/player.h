@@ -42,8 +42,9 @@ class Player : public QObject
 	  void sig_SendPlaylist(QString);
 	  void sig_SetPlayed(QString);
 	  void sig_SetPlayed(Track);
-    void sig_MusicStopped();
+    void sig_VLCStopped();
     void sig_PlayingTrack(Track);
+    void sig_SetBlack();
 	  void sig_WriteData(QString, bool);
 
   public slots:

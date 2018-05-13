@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[9];
-    char stringdata0[105];
+    QByteArrayData data[10];
+    char stringdata0[114];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,16 +33,17 @@ QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
 QT_MOC_LITERAL(1, 11, 13), // "onInsertMovie"
 QT_MOC_LITERAL(2, 25, 0), // ""
 QT_MOC_LITERAL(3, 26, 14), // "onInsertMovies"
-QT_MOC_LITERAL(4, 41, 14), // "onMusicStopped"
-QT_MOC_LITERAL(5, 56, 17), // "onNewArtistPixmap"
-QT_MOC_LITERAL(6, 74, 9), // "onNewInfo"
-QT_MOC_LITERAL(7, 84, 14), // "onPlayingTrack"
-QT_MOC_LITERAL(8, 99, 5) // "Track"
+QT_MOC_LITERAL(4, 41, 12), // "onVLCStopped"
+QT_MOC_LITERAL(5, 54, 17), // "onNewArtistPixmap"
+QT_MOC_LITERAL(6, 72, 9), // "onNewInfo"
+QT_MOC_LITERAL(7, 82, 14), // "onPlayingTrack"
+QT_MOC_LITERAL(8, 97, 5), // "Track"
+QT_MOC_LITERAL(9, 103, 10) // "onSetBlack"
 
     },
     "MainWindow\0onInsertMovie\0\0onInsertMovies\0"
-    "onMusicStopped\0onNewArtistPixmap\0"
-    "onNewInfo\0onPlayingTrack\0Track"
+    "onVLCStopped\0onNewArtistPixmap\0onNewInfo\0"
+    "onPlayingTrack\0Track\0onSetBlack"
 };
 #undef QT_MOC_LITERAL
 
@@ -52,7 +53,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -60,12 +61,13 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   44,    2, 0x0a /* Public */,
-       3,    0,   49,    2, 0x0a /* Public */,
-       4,    0,   50,    2, 0x0a /* Public */,
-       5,    1,   51,    2, 0x0a /* Public */,
-       6,    1,   54,    2, 0x0a /* Public */,
-       7,    1,   57,    2, 0x0a /* Public */,
+       1,    2,   49,    2, 0x0a /* Public */,
+       3,    0,   54,    2, 0x0a /* Public */,
+       4,    0,   55,    2, 0x0a /* Public */,
+       5,    1,   56,    2, 0x0a /* Public */,
+       6,    1,   59,    2, 0x0a /* Public */,
+       7,    1,   62,    2, 0x0a /* Public */,
+       9,    0,   65,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
@@ -74,6 +76,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::QPixmap,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -86,10 +89,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->onInsertMovie((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         case 1: _t->onInsertMovies(); break;
-        case 2: _t->onMusicStopped(); break;
+        case 2: _t->onVLCStopped(); break;
         case 3: _t->onNewArtistPixmap((*reinterpret_cast< QPixmap(*)>(_a[1]))); break;
         case 4: _t->onNewInfo((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 5: _t->onPlayingTrack((*reinterpret_cast< Track(*)>(_a[1]))); break;
+        case 6: _t->onSetBlack(); break;
         default: ;
         }
     }
@@ -120,13 +124,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Log::info("Starte RamocServer");
     ui->setupUi(this);
-    setStyleSheet("QMainWindow {background: 'silver';}");
+    setStyleSheet("QMainWindow {background: 'black';}");
 
     label_ChannelIcon = new QLabel(this);
 
@@ -115,9 +115,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(player, SIGNAL(sig_PlayingTrack(Track)),
             this,         SLOT(onPlayingTrack(Track)));
-    connect(player, SIGNAL(sig_MusicStopped()),
-            this,         SLOT(onMusicStopped()));
+    connect(player, SIGNAL(sig_VLCStopped()),
+            this,         SLOT(onVLCStopped()));
 
+    connect(player, SIGNAL(sig_SetBlack()),
+            this,         SLOT(onSetBlack()));
     connect(lastFm, SIGNAL(new_Artist_Pixmap(QPixmap)), this,
                     SLOT(onNewArtistPixmap(QPixmap)));
 }
@@ -128,7 +130,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::onMusicStopped()
+void MainWindow::onVLCStopped()
 {
   ui->label->setPixmap(pixmap_Main);
   ui->widget_Music->hide();
@@ -191,6 +193,8 @@ void MainWindow::setDesktop(QDesktopWidget *d)
     setGeometry(0,0,desktop->width(), desktop->height());
     pixmap_Main = QPixmap(":/Bilder/Wallpaper");
     pixmap_Main = pixmap_Main.scaled(rec.width(),rec.height());
+    pixmap_Black = QPixmap(":/Bilder/Black");
+    pixmap_Black = pixmap_Black.scaled(rec.width(),rec.height());
     ui->label->setPixmap(pixmap_Main);
     ui->label->setGeometry(0,0,rec.width(), rec.height());
     ui->labelDebug->setGeometry(rec.width()/2 - 150,
@@ -246,4 +250,10 @@ void MainWindow::setDesktop(QDesktopWidget *d)
     progressBar->setGeometry(0,rec.height()-15, rec.width(), 15);
     
     QTimer::singleShot(30000, ui->labelDebug, SLOT(hide()));
+}
+
+void MainWindow::onSetBlack()
+{
+  ui->label->setPixmap(pixmap_Black);
+  ui->widget_Music->hide();
 }

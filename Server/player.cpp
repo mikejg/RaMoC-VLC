@@ -114,6 +114,7 @@ void Player::onPlay(QString str)
 {
   Log::player(Q_FUNC_INFO);
   vlcProcess->play(str);
+  sig_SetBlack();
   //omxProcess->play(str);
 }
 
@@ -208,6 +209,7 @@ void Player::onStop()
   vlcProcess->stop(); 
   //omxProcess->stop();
   mediaObject->stop();
+  sig_VLCStopped();
 }
 
 void Player::onSetSubtitle(QString str)
