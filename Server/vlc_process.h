@@ -61,7 +61,7 @@ public:
     void stop();
 
 protected:
-    void timerEvent(QTimerEvent *event);
+//    void timerEvent(QTimerEvent *event);
 
 signals:
     void sig_NewState(quint8 s);

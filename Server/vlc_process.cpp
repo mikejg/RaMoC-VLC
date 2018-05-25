@@ -45,7 +45,7 @@ void VLCProcess::faster()
     QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 //  if(isFastForward)
 //  {
-//    writeToVLCSocket("normal");
+//    w1riteToVLCSocket("normal");
 //    QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 //    isFastForward = false;
 //  }
@@ -96,6 +96,7 @@ void VLCProcess::rewind()
 void VLCProcess::minutesBackward()
 {
     writeToVLCSocket("get_time");
+    isMinutesBackward = true;
     QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
 
@@ -196,7 +197,8 @@ void VLCProcess::onVLCSocketRead()
     str = vlcSocket.readLine(512);
     Log::player("VLCSocket: " + str);
 
-    if(str.contains("end of Subtitle Track"))
+    if(str.contains("end of Subtitle Track") ||
+        str.contains("end of Untertitelspur"))
     {
       subtitle = false;
       foreach(QString string, subTitleList)
@@ -228,7 +230,8 @@ void VLCProcess::onVLCSocketRead()
       return;
     }
 
-    if(str.contains("Subtitle Track"))
+    if(str.contains("Subtitle Track") || 
+        str.contains("Untertitelspur"))
     {
       subtitle = true;
       subTitleList.clear();
@@ -356,9 +359,9 @@ void VLCProcess::stop()
   QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
 
-void VLCProcess::timerEvent(QTimerEvent *event)
-{
-  writeToVLCSocket("volume");
+//void VLCProcess::timerEvent(QTimerEvent *event)
+//{
+//  writeToVLCSocket("volume");
 //    static bool v = true;
 //    if (v)
 //    {  
@@ -370,7 +373,7 @@ void VLCProcess::timerEvent(QTimerEvent *event)
 //      writeToVLCSocket("volume 0");
 //      v = true;
 //    }
-}
+//
 
 void VLCProcess::writeToVLCSocket(QString str)
 {

@@ -162,11 +162,11 @@ void Socket::onReadData()
     //connected with MainWindow::onInsertMovie(QString, QString);
     sig_InsertMovie(strList_Data.at(1), strList_Data.at(3));
 
-//  if(string.startsWith(minutesBackward))
-//    sig_MinutesBackward();
-//
-//  if(string.startsWith(minutesForward))
-//    sig_MinutesForward();
+  if(string.startsWith(minutesBackward))
+    sig_MinutesBackward();
+
+  if(string.startsWith(minutesForward))
+    sig_MinutesForward();
 
   if(string.startsWith(mute))
     sig_Mute();

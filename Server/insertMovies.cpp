@@ -18,7 +18,7 @@ void InsertMovies::run()
   connect(database, SIGNAL(sig_NewInfo(QString)), this, SIGNAL(sig_NewInfo(QString)));
 
   strList_Path.clear();
-  strList_Path.append("/media");
+//  strList_Path.append("/media");
  // strList_Path.append("/mnt/smb/Archive");
    strList_Path.append("/mnt/smb/Movie");
 //  strList_Path.append("/mnt/smb/Music");
