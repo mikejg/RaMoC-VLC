@@ -1528,3 +1528,11 @@ bind " " select 0
 # nowrap : do not wrap lines which are longer
 #          than the line length on the terminal.
 # vim: set et ts=8 nowrap: THPXRF EOF
+
+screen -t vim
+select 0
+stuff "cd ~/RaMoC-VLC; vim"
+screen -t bash
+screen -t tail
+select 2
+stuff "tail -f /tmp/ramoc.log"

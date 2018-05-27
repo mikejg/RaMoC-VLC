@@ -1,0 +1,10 @@
+#!/bin/bash
+
+aplay /usr/share/sounds/alsa/Front_Left.wav
+
+while `true`
+do
+  /usr/bin/RamocServer &> /tmp/ramoc.log
+done
+
+#/home/pi/RamocServer/RamocServer
