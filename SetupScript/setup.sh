@@ -6,16 +6,18 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y vim screen 
 sudo apt-get install -y ntfs-3g hfsutils hfsprogs
-sudo apt-get install -y apache2 php7.0 php7.0-mysql
+sudo apt-get install -y apache2 php7.1 php7.1-mysql
 sudo apt-get install -y mysql-server autofs
 sudo apt-get install -y libtag1-dev libqt5sql5-mysql
 sudo apt-get install -y libqjson-dev qt5-default 
-sudo apt-get install -y wakeonlan dbus-x11 xorg
-sudo apt-get install -y xorg
+sudo apt-get install -y wakeonlan vlc
+#sudo apt-get install -y xorg
 #sudo apt-get install -y dbus-x11
 sudo apt-get install -y libphonon4qt5-dev 
+sudo apt-get install -y phonon4qt5-backend-vlc 
 #sudo apt-get install -y omxplayer wakeonlan
 #sudo apt-get install -y libxvidcore4 rsync
+sudo apt-get install -y g++ openssh-server make
 sudo apt-get clean -y
 
 #sudo wget https://yt-dl.org/latest/youtube-dl -O /usr/local/bin/youtube-dl
@@ -47,7 +49,11 @@ cp xsession ../../.xsession
 #sudo cp 99-local.rules /etc/udev/rules.d/
 #sudo cp usb-mount.sh /usr/local/bin/
 #
-sudo cp -a html /var/www/
+cp -a ../html /var/www/
+mkdir /var/www/html/Pictures
+mkdir /var/www/html/Pictures/Actor
+mkdir /var/www/html/Pictures/Backdrop
+mkdir /var/www/html/Pictures/Poster
 #
 #cd ../RamocServer
 #make clean

@@ -3,27 +3,16 @@ $actorName=$_REQUEST['actorName'];
 error_log('getActorMovie.php');
 exec('./wakeup.sh');
 
-/*
-  Mit dem MySQL-Server verbinden und Datenbank anwählen
-*/
-$link=mysql_connect("localhost","ramocuser","ramoc");
-if (!$link)
-{
-    die('Verbindung schlug fehl: ' . mysql_error());
-}
-//else
-//    error_log('Verbindung aufgebaut');
-
-$db_selected = mysql_select_db('ramoc', $link);
-if (!$db_selected)
-{
-    die ('Kann ramoc nicht benutzen : ' . mysql_error());
-}
-//else
-//    error_log('Datenbank offen');
-
-
 mysql_query("SET NAMES 'utf8'", $link);
+
+$link=mysqli_connect("localhost","ramocuser","ramoc", "ramoc");
+/* check connection */
+if (mysqli_connect_errno())
+{
+    die('Verbindung schlug fehl: ' . mysqli_connect_error());
+}
+
+mysqli_set_charset($link, "utf8");
 
 $query="select t_Person.name, t_Film.id, t_Film.titel, person, film FROM t_Person_Film ";
 $query.="INNER JOIN t_Person ON t_Person_Film.person = t_Person.id ";

@@ -6,7 +6,8 @@
 VLCProcess::VLCProcess(QObject *parent) : QObject(parent)
 {
     Log::player(Q_FUNC_INFO);
-    argsList << "--verbose" << "0" << "-I" << "oldrc";
+    argsList << "--verbose" << "0" << "-I" << "oldrc" << "--width" << "1920"
+             << "--height" << "1080";
     system("killall vlc");
 
     currentFile = "";
