@@ -23,6 +23,11 @@ Player::Player(QObject *parent) : QObject(parent)
             this,       SIGNAL(sig_NewState(quint8)));
     connect(omxProcess, SIGNAL(sig_SetPlayed(QString)), 
             this,       SIGNAL(sig_SetPlayed(QString)));
+
+    connect(&youtube_dl, SIGNAL(readyReadStandardOutput()), 
+                   this, SLOT(onYouTubeReadStdOut()));
+    connect(&youtube_dl, SIGNAL(finished(int,QProcess::ExitStatus)), 
+                   this, SLOT(onYouTubeFinished(int,QProcess::ExitStatus)));
 }
 
 Player::~Player()
@@ -171,10 +176,11 @@ void Player::onPlayYoutube(QString str)
   Log::player(Q_FUNC_INFO);
   Log::player(str);
 
-//  QStringList youtube_dlArgsList;
-//  youtube_dlArgsList << "-g" << "-f" << "best" << str;
-//  youtube_dl.start("/usr/bin/youtube-dl", youtube_dlArgsList);
+  QStringList youtube_dlArgsList;
+  youtube_dlArgsList << "-g" << "-f" << "best" << str;
+  youtube_dl.start("/usr/bin/youtube-dl", youtube_dlArgsList);
 }
+
 void Player::onReceiveTracks(QList<Track> trackList)
 {
   Log::player(Q_FUNC_INFO);
@@ -261,4 +267,19 @@ void Player::onUpdateID3Tag_Artist(QString oldArtist, QString newArtist)
        playlist[i].artist = newArtist;
   }
   sig_WriteData("114", true);
+}
+
+void Player::onYouTubeFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+      Log::player("youtube-dl finished. Returned: " + QString("%1").arg(exitCode) 
+                        + "; exit status: " + QString("%1").arg(exitStatus));
+}
+
+void Player::onYouTubeReadStdOut()
+{
+    Log::player(Q_FUNC_INFO);
+    QString url = youtube_dl.readAllStandardOutput();
+    url = url.remove("\n");
+    Log::player(url);
+    onPlayStream(url);
 }

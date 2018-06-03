@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+sudo apt-get -y install libphonon4qt5-dev
+make -j3
+sudo make install
+sudo apt-get -y install phonon4qt5-backend-vlc
+killall RamocServer

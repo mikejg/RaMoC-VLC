@@ -24,6 +24,7 @@ class Player : public QObject
     VLCProcess*   vlcProcess;
     OMXProcess*   omxProcess;
     Track         track;
+    QProcess      youtube_dl;
 
     Phonon::MediaObject* mediaObject;
     Phonon::AudioOutput* audioOutput;
@@ -68,6 +69,8 @@ class Player : public QObject
     void onUpdateID3Tag_Title(QString, QString);
     void onUpdateID3Tag_Album(QString, QString);
     void onUpdateID3Tag_Artist(QString, QString);
+    void onYouTubeFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onYouTubeReadStdOut();
 };
 
 #endif
