@@ -60,7 +60,8 @@ SOURCES       = database.cpp \
 		server.cpp \
 		socket.cpp \
 		player.cpp \
-		omx_process.cpp qrc_resource.cpp \
+		omx_process.cpp \
+		fileCopyThread.cpp qrc_resource.cpp \
 		moc_database.cpp \
 		moc_insertMovies.cpp \
 		moc_lastfm.cpp \
@@ -70,7 +71,8 @@ SOURCES       = database.cpp \
 		moc_server.cpp \
 		moc_socket.cpp \
 		moc_player.cpp \
-		moc_omx_process.cpp
+		moc_omx_process.cpp \
+		moc_fileCopyThread.cpp
 OBJECTS       = database.o \
 		insertMovies.o \
 		lastfm.o \
@@ -82,6 +84,7 @@ OBJECTS       = database.o \
 		socket.o \
 		player.o \
 		omx_process.o \
+		fileCopyThread.o \
 		qrc_resource.o \
 		moc_database.o \
 		moc_insertMovies.o \
@@ -92,7 +95,8 @@ OBJECTS       = database.o \
 		moc_server.o \
 		moc_socket.o \
 		moc_player.o \
-		moc_omx_process.o
+		moc_omx_process.o \
+		moc_fileCopyThread.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -148,6 +152,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -179,7 +184,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		server.h \
 		socket.h \
 		player.h \
-		omx_process.h database.cpp \
+		omx_process.h \
+		fileCopyThread.h database.cpp \
 		insertMovies.cpp \
 		lastfm.cpp \
 		log.cpp \
@@ -189,7 +195,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		server.cpp \
 		socket.cpp \
 		player.cpp \
-		omx_process.cpp
+		omx_process.cpp \
+		fileCopyThread.cpp
 QMAKE_TARGET  = RamocServer
 DESTDIR       = 
 TARGET        = RamocServer
@@ -256,6 +263,7 @@ Makefile: RamocServer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -341,6 +349,7 @@ Makefile: RamocServer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -386,8 +395,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resource.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents constants.h database.h insertMovies.h lastfm.h log.h mainwindow.h vlc_process.h server.h socket.h player.h omx_process.h $(DISTDIR)/
-	$(COPY_FILE) --parents database.cpp insertMovies.cpp lastfm.cpp log.cpp main.cpp mainwindow.cpp vlc_process.cpp server.cpp socket.cpp player.cpp omx_process.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents constants.h database.h insertMovies.h lastfm.h log.h mainwindow.h vlc_process.h server.h socket.h player.h omx_process.h fileCopyThread.h $(DISTDIR)/
+	$(COPY_FILE) --parents database.cpp insertMovies.cpp lastfm.cpp log.cpp main.cpp mainwindow.cpp vlc_process.cpp server.cpp socket.cpp player.cpp omx_process.cpp fileCopyThread.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -431,9 +440,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -m64 -pipe -std=c++11 -Wno-reorder -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_database.cpp moc_insertMovies.cpp moc_lastfm.cpp moc_log.cpp moc_mainwindow.cpp moc_vlc_process.cpp moc_server.cpp moc_socket.cpp moc_player.cpp moc_omx_process.cpp
+compiler_moc_header_make_all: moc_database.cpp moc_insertMovies.cpp moc_lastfm.cpp moc_log.cpp moc_mainwindow.cpp moc_vlc_process.cpp moc_server.cpp moc_socket.cpp moc_player.cpp moc_omx_process.cpp moc_fileCopyThread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_database.cpp moc_insertMovies.cpp moc_lastfm.cpp moc_log.cpp moc_mainwindow.cpp moc_vlc_process.cpp moc_server.cpp moc_socket.cpp moc_player.cpp moc_omx_process.cpp
+	-$(DEL_FILE) moc_database.cpp moc_insertMovies.cpp moc_lastfm.cpp moc_log.cpp moc_mainwindow.cpp moc_vlc_process.cpp moc_server.cpp moc_socket.cpp moc_player.cpp moc_omx_process.cpp moc_fileCopyThread.cpp
 moc_database.cpp: log.h \
 		database.h \
 		moc_predefs.h \
@@ -460,6 +469,7 @@ moc_log.cpp: log.h \
 moc_mainwindow.cpp: vlc_process.h \
 		log.h \
 		database.h \
+		fileCopyThread.h \
 		player.h \
 		omx_process.h \
 		insertMovies.h \
@@ -474,6 +484,7 @@ moc_mainwindow.cpp: vlc_process.h \
 
 moc_vlc_process.cpp: log.h \
 		database.h \
+		fileCopyThread.h \
 		vlc_process.h \
 		moc_predefs.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
@@ -497,6 +508,7 @@ moc_socket.cpp: log.h \
 moc_player.cpp: log.h \
 		database.h \
 		vlc_process.h \
+		fileCopyThread.h \
 		omx_process.h \
 		player.h \
 		moc_predefs.h \
@@ -509,6 +521,12 @@ moc_omx_process.cpp: log.h \
 		moc_predefs.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/drue/RaMoC-VLC/Server -I/usr/include/taglib -I/usr/include/phonon4qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include omx_process.h -o moc_omx_process.cpp
+
+moc_fileCopyThread.cpp: log.h \
+		fileCopyThread.h \
+		moc_predefs.h \
+		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/drue/RaMoC-VLC/Server -I/usr/include/taglib -I/usr/include/phonon4qt5 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include fileCopyThread.h -o moc_fileCopyThread.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -548,6 +566,7 @@ main.o: main.cpp mainwindow.h \
 		vlc_process.h \
 		log.h \
 		database.h \
+		fileCopyThread.h \
 		player.h \
 		omx_process.h \
 		insertMovies.h \
@@ -561,6 +580,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		vlc_process.h \
 		log.h \
 		database.h \
+		fileCopyThread.h \
 		player.h \
 		omx_process.h \
 		insertMovies.h \
@@ -573,7 +593,8 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 
 vlc_process.o: vlc_process.cpp vlc_process.h \
 		log.h \
-		database.h
+		database.h \
+		fileCopyThread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o vlc_process.o vlc_process.cpp
 
 server.o: server.cpp server.h \
@@ -591,6 +612,7 @@ player.o: player.cpp player.h \
 		log.h \
 		database.h \
 		vlc_process.h \
+		fileCopyThread.h \
 		omx_process.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o player.cpp
 
@@ -598,6 +620,10 @@ omx_process.o: omx_process.cpp omx_process.h \
 		log.h \
 		database.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o omx_process.o omx_process.cpp
+
+fileCopyThread.o: fileCopyThread.cpp fileCopyThread.h \
+		log.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fileCopyThread.o fileCopyThread.cpp
 
 qrc_resource.o: qrc_resource.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resource.o qrc_resource.cpp
@@ -631,6 +657,9 @@ moc_player.o: moc_player.cpp
 
 moc_omx_process.o: moc_omx_process.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_omx_process.o moc_omx_process.cpp
+
+moc_fileCopyThread.o: moc_fileCopyThread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_fileCopyThread.o moc_fileCopyThread.cpp
 
 ####### Install
 

@@ -67,8 +67,9 @@ void FileCopyThread::setSource(QString str)
 {
   if(isRunning())
   {
-    this->quit();
+    this->terminate();
   }
   source = str;
+  if(this->wait())
   this->start();
 }
