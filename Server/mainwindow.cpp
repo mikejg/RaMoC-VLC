@@ -169,6 +169,7 @@ void MainWindow::onInsertMovie(QString file_path, QString title)
   if(!insertMovies->isRunning())
     insertMovies->start();
 }
+
 void MainWindow::onInsertMovies()
 {
   if(!insertMovies->isRunning())

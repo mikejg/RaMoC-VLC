@@ -29,6 +29,7 @@ namespace constants
   const QString playYoutube       = "026";
   const QString getSubtitle       = "027";
   const QString setSubtitle       = "028";
+  const QString bufferAndPlay     = "029";
 
   const QString ArtistAlben       = "100";
   const QString nextArtistAlben   = "101";

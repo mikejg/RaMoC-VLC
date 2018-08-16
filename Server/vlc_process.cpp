@@ -6,6 +6,9 @@
 VLCProcess::VLCProcess(QObject *parent) : QObject(parent)
 {
     Log::player(Q_FUNC_INFO);
+
+    fileCopyThread = new FileCopyThread(this);
+
     argsList << "--verbose" << "0" << "-I" << "oldrc" << "--width" << "1920"
              << "--height" << "1080";
     system("killall vlc");
@@ -26,6 +29,7 @@ VLCProcess::VLCProcess(QObject *parent) : QObject(parent)
             this,        SLOT(onYouTubeReadStdOut()));
     connect(&youtube_dl, SIGNAL(finished(int,QProcess::ExitStatus)), 
             this,        SLOT(onYouTubeFinished(int,QProcess::ExitStatus)));
+    connect(fileCopyThread, SIGNAL(playBuffer()), this, SLOT(onPlayBuffer()));
 
     process.start("vlc", argsList);
 
@@ -332,12 +336,19 @@ void VLCProcess::play(QString str)
   }
 
   currentFile = str;
-  writeToVLCSocket("clear");
-  writeToVLCSocket("add " + str);
+  fileCopyThread->setSource(str);
+}
 
-  sig_SetPlayed(str);
+void VLCProcess::onPlayBuffer()
+{
+  writeToVLCSocket("clear");
+//  writeToVLCSocket("add " + str);
+  writeToVLCSocket("add /tmp/buffer");
+
+  sig_SetPlayed(currentFile);
   QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
 }
+
 void VLCProcess::setSubtitle(QString str)
 {
   Log::player(Q_FUNC_INFO);

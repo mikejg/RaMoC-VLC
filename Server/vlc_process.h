@@ -7,9 +7,13 @@
 #include <QMimeType>
 #include <QProcess>
 #include <QLocalSocket>
+#include <QDir>
+#include <QDataStream>
+#include <QFile>
 
 #include "log.h"
 #include "database.h"
+#include "fileCopyThread.h"
 
 class VLCProcess : public QObject
 {
@@ -34,6 +38,7 @@ private:
     bool                    isRewind;
     bool                    isMinutesBackward;
     bool                    isMinutesForward;
+    FileCopyThread*         fileCopyThread;
 
     bool isVLCConnected();
     void parseState(QString);
@@ -81,7 +86,7 @@ public slots:
   void onVLCSocketRead();
   void onYouTubeFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void onYouTubeReadStdOut();
-
+  void onPlayBuffer();
 };
 
 #endif

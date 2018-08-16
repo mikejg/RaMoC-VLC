@@ -131,6 +131,9 @@ void Socket::onReadData()
   if(string.startsWith(bell))
     system("omxplayer /home/pi/RaMoC/beep.mp3");
 
+//  if(string.startsWith(bufferAndPlay))
+//    handleBufferAndPlay(strList_Data);
+
   if(string.startsWith(deleteMovie))
     //connected with DataBase::onDelete(QString);
     sig_DeleteMovie(strList_Data.at(1));

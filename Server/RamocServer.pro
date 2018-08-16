@@ -38,7 +38,8 @@ SOURCES += database.cpp\
         server.cpp\
         socket.cpp\
         player.cpp\
-        omx_process.cpp
+        omx_process.cpp\
+        fileCopyThread.cpp
 
 HEADERS  += constants.h\
             database.h\
@@ -50,7 +51,8 @@ HEADERS  += constants.h\
             server.h\
             socket.h\
             player.h\
-            omx_process.h
+            omx_process.h\
+            fileCopyThread.h
 
 FORMS    += mainwindow.ui
 
