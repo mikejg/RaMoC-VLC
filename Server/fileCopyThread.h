@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QFile>
+#include <QFileInfo>
 #include <QDataStream>
 #include <log.h>
 

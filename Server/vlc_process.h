@@ -62,6 +62,7 @@ public:
     void minutesForward();
     void mute();
     void play(QString str);
+    void playStream(QString str);
     void setSubtitle(QString str);
     void stop();
 

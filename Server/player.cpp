@@ -128,7 +128,7 @@ void Player::onPlayStream(QString str)
   Log::player(Q_FUNC_INFO);
   //omxProcess->stop();
   mediaObject->stop();
-  vlcProcess->play(str);
+  vlcProcess->playStream(str);
 }
 
 void Player::onPlayTrack(int tracknumber)

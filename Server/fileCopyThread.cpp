@@ -9,6 +9,7 @@ void FileCopyThread::run()
 {
   QFile file(source);
   QFile target("/tmp/buffer");
+  QFileInfo fileInfo(source);
 
   if(target.exists())
   {
@@ -32,8 +33,9 @@ void FileCopyThread::run()
     Log::player("target kann nicht geöffnet werden: " + source);
     return;
   }
+
   QDataStream in(&file);
-  int len = 4096;
+  int len = 16384;
   int count = 0;
   bool b = false;
 
@@ -49,7 +51,7 @@ void FileCopyThread::run()
       Log::player("error writeData");
 
     count = count + len;
-    if(count > 65536 && !b)
+    if(count > 262144 && !b)
     {
       b = true;
       playBuffer();

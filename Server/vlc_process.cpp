@@ -339,6 +339,25 @@ void VLCProcess::play(QString str)
   fileCopyThread->setSource(str);
 }
 
+void VLCProcess::playStream(QString str)
+{
+  Log::player(Q_FUNC_INFO);
+  if(currentFile == str)
+  {
+    writeToVLCSocket("pause");
+    writeToVLCSocket("normal");
+    QTimer::singleShot(500, this, SLOT(onVLCStatus()));
+    return;
+  }
+
+  currentFile = str;
+  writeToVLCSocket("clear");
+  writeToVLCSocket("add " + str);
+
+  sig_SetPlayed(currentFile);
+  QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
+}
+
 void VLCProcess::onPlayBuffer()
 {
   writeToVLCSocket("clear");
@@ -364,6 +383,8 @@ void VLCProcess::stop()
 //                                                  "org.mpris.MediaPlayer2.Player",
 //                                                  "Stop");
 //  qDebug() << QDBusConnection::sessionBus().send(m);
+
+  fileCopyThread->terminate();
   currentFile = "";
   writeToVLCSocket("stop");
   writeToVLCSocket("clear");
