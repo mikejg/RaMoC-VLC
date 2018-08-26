@@ -429,6 +429,13 @@ void VLCProcess::onPlayBuffer()
   QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
   QTimer::singleShot(500, this, SLOT(onVLCAudio()));
   QTimer::singleShot(1000, this, SLOT(onVLCStatus()));
+  QTimer::singleShot(5000, this, SLOT(setVolume()));
+}
+
+void VLCProcess::setVolume()
+{
+  writeToVLCSocket("volume 255");
+  QTimer::singleShot(1000, this, SLOT(onVLCStatus()));
 }
 
 void VLCProcess::setSubtitle(QString str)

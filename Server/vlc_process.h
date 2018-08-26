@@ -92,6 +92,8 @@ public slots:
   void onYouTubeFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void onYouTubeReadStdOut();
   void onPlayBuffer();
+
+  void setVolume();
 };
 
 #endif
