@@ -422,6 +422,7 @@ void VLCProcess::onPlayBuffer()
   writeToVLCSocket("clear");
 //  writeToVLCSocket("add " + str);
   writeToVLCSocket("add /tmp/buffer");
+  writeToVLCSocket("volume 255");
 
   sig_SetPlayed(currentFile);
   //QTimer::singleShot(20000, this, SLOT(onVLCSubtitle()));
@@ -443,6 +444,7 @@ void VLCProcess::setAudio(QString str)
   writeToVLCSocket("atrack " + str);
   QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
+
 void VLCProcess::stop()
 {
   Log::player(Q_FUNC_INFO);
