@@ -50,6 +50,8 @@ void Server::onNewConnection()
                   SLOT(onDisconnected()));
   connect(socket, SIGNAL(sig_GetArtistAlben(QString)),       this,
                   SIGNAL(sig_GetArtistAlben(QString)));
+  connect(socket, SIGNAL(sig_GetAudio()),                 this,
+                  SIGNAL(sig_GetAudio()));
   connect(socket, SIGNAL(sig_GetFavorite()),                 this,
                   SIGNAL(sig_GetFavorite()));
   connect(socket, SIGNAL(sig_GetSubtitle()),                 this,
@@ -84,6 +86,8 @@ void Server::onNewConnection()
                   SIGNAL(sig_PlayYoutube(QString)));
   connect(socket, SIGNAL(sig_RestoreMovie(QString)),         this,
                   SIGNAL(sig_RestoreMovie(QString)));
+  connect(socket, SIGNAL(sig_SetAudio(QString)),          this,
+                  SIGNAL(sig_SetAudio(QString)));
   connect(socket, SIGNAL(sig_SetFavorite(QString)),          this,
                   SIGNAL(sig_SetFavorite(QString)));
   connect(socket, SIGNAL(sig_SetID3Tag(QString)),            this,

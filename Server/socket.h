@@ -53,6 +53,7 @@ signals:
     void sig_DeletePlaylist();
     void sig_Disconnected();
     void sig_GetArtistAlben(QString);
+    void sig_GetAudio();
     void sig_GetFavorite();
     void sig_GetPlaylist();
     void sig_GetRandom();
@@ -70,6 +71,7 @@ signals:
     void sig_PlayTrack(int);
     void sig_PlayYoutube(QString);
     void sig_RestoreMovie(QString);
+    void sig_SetAudio(QString);
     void sig_SetFavorite(QString);
     void sig_SetID3Tag(QString);
     void sig_SetSubtitle(QString);

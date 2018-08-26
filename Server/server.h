@@ -34,6 +34,7 @@ signals:
   void sig_DeleteMovie(QString);
   void sig_DeletePlaylist();
   void sig_GetArtistAlben(QString);
+  void sig_GetAudio();
   void sig_GetFavorite();
   void sig_GetPlaylist();
   void sig_GetRandom();
@@ -56,6 +57,7 @@ signals:
   void sig_SendArtistAlben(QStringList);
   void sig_SendPlaylist(QString);
   void sig_SendUnsortedFiles(QString);
+  void sig_SetAudio(QString);
   void sig_SetFavorite(QString);
   void sig_SetID3Tag(QString);
   void sig_SetSubtitle(QString);

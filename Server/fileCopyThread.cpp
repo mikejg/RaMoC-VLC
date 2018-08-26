@@ -51,7 +51,7 @@ void FileCopyThread::run()
       Log::player("error writeData");
 
     count = count + len;
-    if(count > 262144 && !b)
+    if(count > 10000000 && !b)
     {
       b = true;
       playBuffer();

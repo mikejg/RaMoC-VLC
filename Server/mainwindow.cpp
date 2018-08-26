@@ -75,6 +75,8 @@ MainWindow::MainWindow(QWidget *parent) :
             player, SLOT(onDeletePlaylist()));
     connect(server,       SIGNAL(sig_Backward()),
             player, SLOT(onBackward()));
+    connect(server,       SIGNAL(sig_GetAudio()),
+            player, SLOT(onGetAudio()));
     connect(server,       SIGNAL(sig_GetPlaylist()),
             player, SLOT(onGetPlaylist()));
     connect(server,       SIGNAL(sig_GetSubtitle()),
@@ -97,6 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
             player, SLOT(onPlayYoutube(QString)));
     connect(server,       SIGNAL(sig_Stop()),
             player, SLOT(onStop()));
+    connect(server,       SIGNAL(sig_SetAudio(QString)),
+            player, SLOT(onSetAudio(QString)));
     connect(server,       SIGNAL(sig_SetSubtitle(QString)),
             player, SLOT(onSetSubtitle(QString)));
     connect(server,       SIGNAL(sig_ToggleSubtitle()),

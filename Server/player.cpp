@@ -95,6 +95,10 @@ void Player::onGetSubtitle()
   vlcProcess->getSubtitle();
 }
 
+void Player::onGetAudio()
+{
+  vlcProcess->getAudio();
+}
 void Player::onIncSpeed()
 {
   vlcProcess->faster();
@@ -221,6 +225,11 @@ void Player::onStop()
 void Player::onSetSubtitle(QString str)
 {
   vlcProcess->setSubtitle(str);
+}
+
+void Player::onSetAudio(QString str)
+{
+  vlcProcess->setAudio(str);
 }
 
 void Player::onTrackFinished()

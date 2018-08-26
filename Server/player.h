@@ -52,6 +52,7 @@ class Player : public QObject
     void onDeletePlaylist();
     void onBackward();
 	  void onGetPlaylist();
+	  void onGetAudio();
     void onGetSubtitle();
 	  void onIncSpeed();
 	  void onMinutesBackward();
@@ -63,6 +64,7 @@ class Player : public QObject
     void onPlayYoutube(QString);
 	  void onReceiveTracks(QList<Track>);
     void onSetSubtitle(QString);
+    void onSetAudio(QString);
 	  void onStop();
 	  void onToggleSubtitle();
     void onTrackFinished();

@@ -145,6 +145,9 @@ void Socket::onReadData()
   if(string.startsWith(forward))
     sig_IncSpeed();
 
+  if(string.startsWith(getAudio))
+    sig_GetAudio();
+
   if(string.startsWith(getFavorite))
     sig_GetFavorite();
 
@@ -205,6 +208,10 @@ void Socket::onReadData()
     //connected with PlayerWindow::onGetPlaylist
     sig_GetPlaylist();
   
+  if(string.startsWith(setAudio))
+    //connected with Player::onSetSubtitle
+    sig_SetAudio(strList_Data.at(1));
+
   if(string.startsWith(setFavorite))
     //connected with PlayerWindow::onSetFavorite
     sig_SetFavorite(strList_Data.at(1));

@@ -34,6 +34,7 @@ private:
     QStringList             argsList;
     QStringList             strackList;
     QStringList             subTitleList;
+    QStringList             audioList;
     bool                    isFastForward;
     bool                    isRewind;
     bool                    isMinutesBackward;
@@ -56,6 +57,7 @@ public:
     explicit 		 VLCProcess(QObject *parent = 0);
                  ~VLCProcess();
     void faster();
+    void getAudio();
     void getSubtitle();
     void rewind();
     void minutesBackward();
@@ -64,6 +66,7 @@ public:
     void play(QString str);
     void playStream(QString str);
     void setSubtitle(QString str);
+    void setAudio(QString str);
     void stop();
 
 protected:
@@ -77,6 +80,7 @@ signals:
 public slots:
 //	void onSetPlayed();
 //	void onStarted();
+  void onVLCAudio();
   void onVLCFinished(int, QProcess::ExitStatus);
   void onVLCReadError();
   void onVLCReadStdOut();

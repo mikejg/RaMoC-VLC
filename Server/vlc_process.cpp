@@ -81,6 +81,24 @@ void VLCProcess::getSubtitle()
   sig_WriteData("027|" + strReturn, true);
 }
 
+void VLCProcess::getAudio()
+{
+  Log::player(Q_FUNC_INFO);
+  QString strReturn = "[";
+
+  for (int i = 0; i < audioList.size(); i++)
+  {
+    //letzter Eintrag ohne abschliessendem ','
+    if(i == audioList.size() -1)
+      strReturn = strReturn + "{\"path\":\"" + audioList.at(i) + "\"}";
+    else
+      strReturn = strReturn + "{\"path\":\"" + audioList.at(i) + "\"},";
+  }
+
+  strReturn = strReturn + "]";
+
+  sig_WriteData("029|" + strReturn, true);
+}
 void VLCProcess::rewind()
 {
   Log::player(Q_FUNC_INFO);
@@ -191,11 +209,17 @@ void VLCProcess::onVLCSubtitle()
   writeToVLCSocket("strack");
 }
 
+void VLCProcess::onVLCAudio()
+{
+  writeToVLCSocket("atrack");
+}
+
 void VLCProcess::onVLCSocketRead()
 {
   //Log::player(Q_FUNC_INFO);
   QString str;
   bool subtitle = false;
+  bool audioTrack = false;
 
   while(vlcSocket.canReadLine())
   {
@@ -211,6 +235,15 @@ void VLCProcess::onVLCSocketRead()
       return;
     }
 
+    if(str.contains("end of Audio Track") ||
+        str.contains("end of Audiospur"))
+    {
+      audioTrack = false;
+      foreach(QString string, audioList)
+        Log::error(string);
+      return;
+    }
+
     if(subtitle)
     {
       str = str.remove("\n");
@@ -220,6 +253,17 @@ void VLCProcess::onVLCSocketRead()
         str = str.remove(0,1);
       }
       subTitleList << str;
+    }
+
+    if(audioTrack)
+    {
+      str = str.remove("\n");
+      str = str.remove("\r");
+      while(!str.at(0).isDigit())
+      {
+        str = str.remove(0,1);
+      }
+      audioList << str;
     }
 
     if(str.contains("play state:"))
@@ -240,6 +284,13 @@ void VLCProcess::onVLCSocketRead()
     {
       subtitle = true;
       subTitleList.clear();
+    }
+
+    if(str.contains("Audio Track") || 
+        str.contains("Audiospur"))
+    {
+      audioTrack = true;
+      audioList.clear();
     }
 
     if(str.at(0).isDigit() && (isMinutesBackward || isMinutesForward))
@@ -337,6 +388,14 @@ void VLCProcess::play(QString str)
 
   currentFile = str;
   fileCopyThread->setSource(str);
+//  writeToVLCSocket("clear");
+//  writeToVLCSocket("add " + str);
+//
+//  sig_SetPlayed(currentFile);
+//  QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
+//  QTimer::singleShot(500, this, SLOT(onVLCAudio()));
+//  QTimer::singleShot(1000, this, SLOT(onVLCStatus()));
+
 }
 
 void VLCProcess::playStream(QString str)
@@ -365,7 +424,10 @@ void VLCProcess::onPlayBuffer()
   writeToVLCSocket("add /tmp/buffer");
 
   sig_SetPlayed(currentFile);
+  //QTimer::singleShot(20000, this, SLOT(onVLCSubtitle()));
   QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
+  QTimer::singleShot(500, this, SLOT(onVLCAudio()));
+  QTimer::singleShot(1000, this, SLOT(onVLCStatus()));
 }
 
 void VLCProcess::setSubtitle(QString str)
@@ -375,6 +437,12 @@ void VLCProcess::setSubtitle(QString str)
   QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
 
+void VLCProcess::setAudio(QString str)
+{
+  Log::player(Q_FUNC_INFO);
+  writeToVLCSocket("atrack " + str);
+  QTimer::singleShot(500, this, SLOT(onVLCStatus()));
+}
 void VLCProcess::stop()
 {
   Log::player(Q_FUNC_INFO);
