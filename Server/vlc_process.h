@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QDataStream>
 #include <QFile>
+#include <QSysInfo>
 
 #include "log.h"
 #include "database.h"
@@ -28,17 +29,20 @@ private:
     QMimeType               mimeType;
     QWidget*                musicWidget;
     QProcess                process;
-    int                     timerID;
+    //int                     timerID;
     QProcess                youtube_dl;
     QLocalSocket            vlcSocket;
     QStringList             argsList;
     QStringList             strackList;
     QStringList             subTitleList;
     QStringList             audioList;
+    QTimer                  getTimeTimer;
     bool                    isFastForward;
     bool                    isRewind;
     bool                    isMinutesBackward;
     bool                    isMinutesForward;
+    bool                    isGetTime;
+    bool                    isGetLength;
     FileCopyThread*         fileCopyThread;
 
     bool isVLCConnected();
@@ -67,7 +71,9 @@ public:
     void playStream(QString str);
     void setSubtitle(QString str);
     void setAudio(QString str);
+    void setVolume(QString str);
     void stop();
+    void seek(QString);
 
 protected:
 //    void timerEvent(QTimerEvent *event);
@@ -82,6 +88,9 @@ public slots:
 //	void onStarted();
   void onVLCAudio();
   void onVLCFinished(int, QProcess::ExitStatus);
+  void onVLCGetLength();
+  void onVLCGetTime();
+  void onVLCGetVolume();
   void onVLCReadError();
   void onVLCReadStdOut();
   void onVLCRestart();
@@ -92,8 +101,6 @@ public slots:
   void onYouTubeFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void onYouTubeReadStdOut();
   void onPlayBuffer();
-
-  void setVolume();
 };
 
 #endif

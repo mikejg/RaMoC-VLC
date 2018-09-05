@@ -31,6 +31,10 @@ namespace constants
   const QString setSubtitle       = "028";
   const QString getAudio          = "029";
   const QString setAudio          = "030";
+  const QString getVolume         = "031";
+  const QString setVolume         = "032";
+  const QString setTime           = "033";
+  const QString setLength           = "033";
 
   const QString ArtistAlben       = "100";
   const QString nextArtistAlben   = "101";

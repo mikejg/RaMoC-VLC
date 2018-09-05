@@ -227,9 +227,19 @@ void Player::onSetSubtitle(QString str)
   vlcProcess->setSubtitle(str);
 }
 
+void Player::onSeek(QString str)
+{
+  vlcProcess->seek(str);
+}
+
 void Player::onSetAudio(QString str)
 {
   vlcProcess->setAudio(str);
+}
+
+void Player::onSetVolume(QString str)
+{
+  vlcProcess->setVolume(str);
 }
 
 void Player::onTrackFinished()

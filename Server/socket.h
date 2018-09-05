@@ -75,6 +75,8 @@ signals:
     void sig_SetFavorite(QString);
     void sig_SetID3Tag(QString);
     void sig_SetSubtitle(QString);
+    void sig_SetVolume(QString);
+    void sig_SetTime(QString);
     void sig_Stop();
     void sig_ToggleSubtitle();
 

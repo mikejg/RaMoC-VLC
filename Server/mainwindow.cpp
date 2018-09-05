@@ -103,6 +103,10 @@ MainWindow::MainWindow(QWidget *parent) :
             player, SLOT(onSetAudio(QString)));
     connect(server,       SIGNAL(sig_SetSubtitle(QString)),
             player, SLOT(onSetSubtitle(QString)));
+    connect(server,       SIGNAL(sig_SetVolume(QString)),
+            player, SLOT(onSetVolume(QString)));
+    connect(server,       SIGNAL(sig_SetTime(QString)),
+            player, SLOT(onSeek(QString)));
     connect(server,       SIGNAL(sig_ToggleSubtitle()),
             player, SLOT(onToggleSubtitle()));
 

@@ -27,6 +27,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS += -Wno-reorder
+QMAKE_CXXFLAGS += -Wunreachable-code
+QMAKE_CXXFLAGS += -Wunused
 
 SOURCES += database.cpp\
         insertMovies.cpp\

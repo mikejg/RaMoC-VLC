@@ -63,7 +63,9 @@ class Player : public QObject
     void onPlayTrack(int);
     void onPlayYoutube(QString);
 	  void onReceiveTracks(QList<Track>);
+    void onSeek(QString);
     void onSetSubtitle(QString);
+    void onSetVolume(QString);
     void onSetAudio(QString);
 	  void onStop();
 	  void onToggleSubtitle();

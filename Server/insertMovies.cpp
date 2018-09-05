@@ -21,7 +21,7 @@ void InsertMovies::run()
   //strList_Path.append("/media");
  // strList_Path.append("/mnt/smb/Archive");
   strList_Path.append("/mnt/smb/Movie");
-//  strList_Path.append("/mnt/smb/Music");
+  strList_Path.append("/mnt/smb/Music");
   strList_Path.append("/mnt/smb/TVShow");
   QString path;
   strList_DBFiles = database->getFileList();

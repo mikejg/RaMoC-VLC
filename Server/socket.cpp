@@ -224,6 +224,14 @@ void Socket::onReadData()
     //connected with Player::onSetSubtitle
     sig_SetSubtitle(strList_Data.at(1));
 
+  if(string.startsWith(setVolume))
+    //connected with Player::onSetVolume
+    sig_SetVolume(strList_Data.at(1));
+
+  if(string.startsWith(setTime))
+    //connected with Player::onSeek
+    sig_SetTime(strList_Data.at(1));
+
   if(string.startsWith(stop))
     sig_Stop();
   

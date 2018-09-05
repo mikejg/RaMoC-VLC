@@ -94,6 +94,10 @@ void Server::onNewConnection()
                   SIGNAL(sig_SetID3Tag(QString)));
   connect(socket, SIGNAL(sig_SetSubtitle(QString)),            this,
                   SIGNAL(sig_SetSubtitle(QString)));
+  connect(socket, SIGNAL(sig_SetVolume(QString)),            this,
+                  SIGNAL(sig_SetVolume(QString)));
+  connect(socket, SIGNAL(sig_SetTime(QString)),            this,
+                  SIGNAL(sig_SetTime(QString)));
   connect(socket, SIGNAL(sig_Stop()),                        this,
                   SIGNAL(sig_Stop()));
   connect(socket, SIGNAL(sig_ToggleSubtitle()),              this,
