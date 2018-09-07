@@ -9,8 +9,7 @@ VLCProcess::VLCProcess(QObject *parent) : QObject(parent)
 
     fileCopyThread = new FileCopyThread(this);
 
-    argsList << "--verbose" << "0" << "-I" << "oldrc" << "--width" << "1920"
-             << "--height" << "1080";
+    argsList << "--verbose" << "0" << "-I" << "oldrc" << "-f";
     system("killall vlc");
 
     currentFile = "";
@@ -40,6 +39,8 @@ VLCProcess::VLCProcess(QObject *parent) : QObject(parent)
     isRewind      = false;
     isGetTime = false;
     isGetLength = false;
+   subtitle = false;
+   audioTrack = false;
 }
 
 VLCProcess::~VLCProcess()
@@ -219,26 +220,26 @@ void VLCProcess::onVLCStatus()
 void VLCProcess::onVLCSubtitle()
 {
   writeToVLCSocket("strack");
-  onVLCStatus();
+  QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
 
 void VLCProcess::onVLCAudio()
 {
   writeToVLCSocket("atrack");
-  onVLCStatus();
+  QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 }
 
 void VLCProcess::onVLCSocketRead()
 {
   //Log::player(Q_FUNC_INFO);
   QString str;
-  bool subtitle = false;
-  bool audioTrack = false;
+ // bool subtitle = false;
+ // bool audioTrack = false;
 
   while(vlcSocket.canReadLine())
   {
     str = vlcSocket.readLine(512);
-//    Log::player("VLCSocket: " + str);
+    Log::player("VLCSocket: " + str);
     
     if(str.contains("audio volume"))
     {
@@ -300,6 +301,13 @@ void VLCProcess::onVLCSocketRead()
     if(str.contains("play state:"))
     {
         parseState(str);
+        return;
+    }
+
+    if(str.contains("stop state:"))
+    {
+        sig_NewState(0);
+        state = 0;
         return;
     }
 
@@ -393,7 +401,7 @@ void VLCProcess::parseTime(QString str)
   str = str.remove("\n");
   str = str.remove("\r");
 
-  Log::player( str );
+  //Log::player( str );
   int t = str.toInt();
   //Log::player(QString("%1").arg(t));
 
@@ -436,18 +444,19 @@ void VLCProcess::play(QString str)
   }
 
   currentFile = str;
-  if(QSysInfo::currentCpuArchitecture() == "arm")
-  {
+//  if(QSysInfo::currentCpuArchitecture() == "arm")
+//  {
     writeToVLCSocket("clear");
     writeToVLCSocket("add " + str);
+    QTimer::singleShot(500, this, SLOT(onVLCStatus()));
 
     sig_SetPlayed(currentFile);
-    QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));
-  }
-  else
-  {
-    fileCopyThread->setSource(str);
-  }
+    QTimer::singleShot(1000, this, SLOT(onVLCSubtitle()));
+//  }
+//  else
+//  {
+//    fileCopyThread->setSource(str);
+//  }
 }
 
 void VLCProcess::playStream(QString str)
@@ -511,7 +520,10 @@ void VLCProcess::stop()
   fileCopyThread->terminate();
   currentFile = "";
   getTimeTimer.stop();
-
+  if(state == 2)
+  {
+    writeToVLCSocket("pause");
+  }
   writeToVLCSocket("stop");
   writeToVLCSocket("clear");
   writeToVLCSocket("normal");

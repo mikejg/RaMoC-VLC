@@ -136,7 +136,7 @@ void Socket::onReadData()
 
   if(string.startsWith(deleteMovie))
     //connected with DataBase::onDelete(QString);
-    sig_DeleteMovie(strList_Data.at(1));
+    sig_DeleteMovie(strList_Data.at(1), strList_Data.at(2));
 
   if(string.startsWith(deletePlaylist))
     //connected with Playerwindow::onDeletePlaylist()

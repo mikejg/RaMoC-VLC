@@ -166,10 +166,38 @@ void DataBase::insertMovie(Movie movie)
 
 //  if(movie.file_Path.contains(":"))
 //      trimmFilePath(movie.file_Path, ":");
+  if(movie.file_Path.contains("ä"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("ä", "ae");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
 
+  if(movie.file_Path.contains("ö"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("ö", "oe");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
+  if(movie.file_Path.contains("ü"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("ü", "ue");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
+  if(movie.file_Path.contains("ß"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("ß", "ss");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
   if(movie.file_Path.contains("&"))
     movie.file_Path = movie.file_Path.replace("&", "%26");
-  
+
  //     trimmFilePath(movie.file_Path, "&");
 
   if(movie.title.contains("&"))
@@ -774,7 +802,7 @@ void DataBase::trimmFilePath(QString& file_path, QString c)
   file.rename(file_path);
 }
 
-void DataBase::onDelete(QString movieID)
+void DataBase::onDelete(QString movieID, QString del)
 {
   QStringList strList_FilesToDelete = getFiles(movieID);
 
@@ -797,13 +825,15 @@ void DataBase::onDelete(QString movieID)
    loop.exec();
    reply->deleteLater();
 
-
+  if(del == "true")
+  {
   foreach(QString fileName, strList_FilesToDelete)
   {
      Log::info("Delete " + fileName);
      QFile file(fileName);
      if(!file.remove())
       Log::error("Fehler beim Loeschen von " + fileName);
+  }
   }
 }
 

@@ -49,7 +49,7 @@ public:
 signals:
     void sig_ArchiveMovie(QString);
     void sig_Backward();
-    void sig_DeleteMovie(QString);
+    void sig_DeleteMovie(QString, QString);
     void sig_DeletePlaylist();
     void sig_Disconnected();
     void sig_GetArtistAlben(QString);

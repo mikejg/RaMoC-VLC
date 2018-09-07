@@ -158,7 +158,7 @@ class DataBase : public QObject
   public slots:
     void onArchive(QString);
     void onArtistAlben(QString);
-    void onDelete(QString);
+    void onDelete(QString, QString);
     void onGetFavorite();
     void onGetRandom();
     void onGetTracks(QString, QString);

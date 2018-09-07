@@ -52,8 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(server,       SIGNAL(sig_ArchiveMovie(QString)),
             database,     SLOT(onArchive(QString)));
-    connect(server,       SIGNAL(sig_DeleteMovie(QString)),
-            database,     SLOT(onDelete(QString)));
+    connect(server,       SIGNAL(sig_DeleteMovie(QString, QString)),
+            database,     SLOT(onDelete(QString, QString)));
     connect(server,       SIGNAL(sig_GetArtistAlben(QString)),
             database,     SLOT(onArtistAlben(QString)));
     connect(server,       SIGNAL(sig_GetFavorite()),

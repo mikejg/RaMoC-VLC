@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 ping -c1 -w1 -q 192.168.0.2 > /dev/null
 if [ $? -ne 0 ]
@@ -33,47 +33,25 @@ then
 fi
 
 #NAS ist gestartet und gemountet
-#es werden noch ein paar versteckte Ordner sichtbar gemacht
 TODAY=$(/bin/date +%y%m%d)
+cd /mnt/smb/dbBackup/Pictures/Actor
+rm *
+cd /mnt/smb/dbBackup/Pictures/Poster
+rm *
+cd /mnt/smb/dbBackup/Pictures/Backdrop
+rm *
 
-cd /var/www/html
-rsync -avR  Pictures /mnt/smb/dbBackup
+cd /var/www/html/Pictures/Actor
+cp -v * /mnt/smb/dbBackup/Pictures/Actor
+
+cd /var/www/html/Pictures/Poster
+cp -v * /mnt/smb/dbBackup/Pictures/Poster
+
+cd /var/www/html/Pictures/Backdrop
+cp -v * /mnt/smb/dbBackup/Pictures/Backdrop
+#rsync -avR --omit-dir-times Pictures /mnt/smb/dbBackup
 mysqldump -u ramocuser -pramoc ramoc > /mnt/smb/dbBackup/$TODAY.sql
-#DAILY=(workspace ConfigFiles Skripte Projekte)
-#for DAILY in "${DAILY[@]}"
-#do
-#	rsync -e /usr/bin/ssh -avR $DAILY 192.168.2.100:/Backup/$TODAY
-#done
-
-#RaMoc Datenbank sichern
-#ssh 192.168.2.100 "mysqldump -u ramocuser -pramoc --databases ramoc > /Backup/RaMoC.sql"
-
-#Tagesverzeichnis packen & loeschen
-#ssh 192.168.2.100 "tar --directory /Backup -czf /Backup/\"$TODAY\".tgz \"$TODAY\""
-#ssh 192.168.2.100 "rm -rf /Backup/\"$TODAY\""
 
 logger "AutoBackup: done"
-
-### Git Backup ###
-#cd /home/drue/workspace/RaMoC-L
-#
-#git add -A
-#git commit -a -m "`date`"
-#
-#git push origin master
-#
-#SOURCES=(/home/drue/workspace/RaMoC /home/drue/Projekte/RaMoC/RaMoc-Client )
-
-#for SOURCE in "${SOURCES[@]}"
-#do
-#		cd $SOURCE
-#		git add -A
-#		git commit -a -m "`date`"
-#
-#		git push origin master
-#		
-#done 
-#sudo /sbin/shutdown -h now
-#sudo systemctl suspend
 
 

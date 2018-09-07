@@ -43,6 +43,9 @@ private:
     bool                    isMinutesForward;
     bool                    isGetTime;
     bool                    isGetLength;
+    bool subtitle;
+    bool audioTrack;
+
     FileCopyThread*         fileCopyThread;
 
     bool isVLCConnected();

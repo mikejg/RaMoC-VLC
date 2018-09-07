@@ -20,9 +20,9 @@ void InsertMovies::run()
   strList_Path.clear();
   //strList_Path.append("/media");
  // strList_Path.append("/mnt/smb/Archive");
-  strList_Path.append("/mnt/smb/Movie");
-  strList_Path.append("/mnt/smb/Music");
+  //strList_Path.append("/mnt/smb/Music");
   strList_Path.append("/mnt/smb/TVShow");
+  strList_Path.append("/mnt/smb/Movie");
   QString path;
   strList_DBFiles = database->getFileList();
   Log::info("Start check_HDD");

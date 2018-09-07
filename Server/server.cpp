@@ -42,8 +42,8 @@ void Server::onNewConnection()
                   SIGNAL(sig_ArchiveMovie(QString)));
   connect(socket, SIGNAL(sig_Backward()),                    this,
                   SIGNAL(sig_Backward()));
-  connect(socket, SIGNAL(sig_DeleteMovie(QString)),          this,
-                  SIGNAL(sig_DeleteMovie(QString)));
+  connect(socket, SIGNAL(sig_DeleteMovie(QString, QString)),          this,
+                  SIGNAL(sig_DeleteMovie(QString, QString)));
   connect(socket, SIGNAL(sig_DeletePlaylist()),              this,
                   SIGNAL(sig_DeletePlaylist()));
   connect(socket, SIGNAL(sig_Disconnected()),                this,
