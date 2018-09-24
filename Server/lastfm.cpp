@@ -5,6 +5,7 @@ M_LastFm::M_LastFm(QObject *parent) :
     string_API_Key("8311f747b2eb886f15f6710d83c0438d")
 {
     networkAccessManager = new QNetworkAccessManager(this);
+    isRunning = false;
 }
 
 void M_LastFm::slot_parse_Album_Image_Url()
@@ -92,6 +93,7 @@ void M_LastFm::slot_parse_Artist_Image_Url()
         }
     }
     networkReplay->deleteLater();
+    isRunning = false;
 }
 
 void M_LastFm::slot_load_Album_Image()
@@ -129,6 +131,9 @@ void M_LastFm::start_Search_Album_Image(QString artist, QString album)
 
 void M_LastFm::start_Search_Artist_Image(QString artist)
 {
+  if(!isRunning)
+  {
+    isRunning = true;
     string_Artist = artist.replace(" ", "+");
 
     networkReplay = networkAccessManager->get(QNetworkRequest(QUrl(QString("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="
@@ -136,9 +141,11 @@ void M_LastFm::start_Search_Artist_Image(QString artist)
                                                            +"&api_key="
                                                            + string_API_Key))));
 
-    connect(networkReplay, SIGNAL(finished()), this, SLOT(slot_parse_Artist_Image_Url()));
-    connect(networkReplay, SIGNAL(error(QNetworkReply::NetworkError)),
-             this, SLOT(slotError(QNetworkReply::NetworkError)));
+    connect(networkReplay, SIGNAL(finished()), this,
+                           SLOT(slot_parse_Artist_Image_Url()));
+    connect(networkReplay, SIGNAL(error(QNetworkReply::NetworkError)),this,
+                           SLOT(slotError(QNetworkReply::NetworkError)));
+  }
 }
 
 void M_LastFm::slotError(QNetworkReply::NetworkError)

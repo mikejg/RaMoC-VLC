@@ -30,6 +30,7 @@ class Player : public QObject
     Phonon::AudioOutput* audioOutput;
 
     QString 		 genJsonTracks(QList<Track> tracklist);
+    bool isRadio;
 
   public:
     explicit 		 Player(QObject *parent = 0);
@@ -37,6 +38,7 @@ class Player : public QObject
     QList<Track> getPlaylist() { return playlist; }
     int     		 getCurrentIndex() { return currentIndex; }
 		Track 			 getCurrentTrack();
+    void         unUsed();
 
   signals:
 	  void sig_NewState(quint8);
@@ -55,12 +57,14 @@ class Player : public QObject
 	  void onGetAudio();
     void onGetSubtitle();
 	  void onIncSpeed();
+    void onMetaDataChanged();
 	  void onMinutesBackward();
 	  void onMinutesForward();
 	  void onMute();
 	  void onPlay(QString);
 	  void onPlayStream(QString);
     void onPlayTrack(int);
+    void onPlayRadio(QString);
     void onPlayYoutube(QString);
 	  void onReceiveTracks(QList<Track>);
     void onSeek(QString);

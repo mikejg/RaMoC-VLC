@@ -68,8 +68,8 @@ void Server::onNewConnection()
                   SIGNAL(sig_IncSpeed()));
   connect(socket, SIGNAL(sig_InsertMovies()),                this,
                   SIGNAL(sig_InsertMovies()));
-  connect(socket, SIGNAL(sig_InsertMovie(QString, QString)), this,
-                  SIGNAL(sig_InsertMovie(QString, QString)));
+  connect(socket, SIGNAL(sig_InsertMovie(Movie)), this,
+                  SIGNAL(sig_InsertMovie(Movie)));
   connect(socket, SIGNAL(sig_MinutesBackward()),             this,
                   SIGNAL(sig_MinutesBackward()));
   connect(socket, SIGNAL(sig_MinutesForward()),              this,
@@ -80,6 +80,8 @@ void Server::onNewConnection()
                   SIGNAL(sig_Play(QString)));
   connect(socket, SIGNAL(sig_PlayStream(QString)),           this,
                   SIGNAL(sig_PlayStream(QString)));
+  connect(socket, SIGNAL(sig_PlayRadio(QString)),           this,
+                  SIGNAL(sig_PlayRadio(QString)));
   connect(socket, SIGNAL(sig_PlayTrack(int)),                this,
                   SIGNAL(sig_PlayTrack(int)));
   connect(socket, SIGNAL(sig_PlayYoutube(QString)),           this,

@@ -726,6 +726,7 @@ void DataBase::onGetUnsortedFiles()
     strList_Path.clear();
     strList_Path.append("/media");
     strList_Path.append("/mnt/smb/Movie");
+    //strList_Path.append("/mnt/smb/Archive");
     QString path;
     while(strList_Path.size() > 0)
     {

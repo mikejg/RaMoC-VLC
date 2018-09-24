@@ -20,6 +20,7 @@ private:
     QString string_API_Key;
     QString string_Artist;
     QString string_Album;
+    bool isRunning;
 
 public:
     explicit M_LastFm(QObject *parent = 0);

@@ -35,6 +35,30 @@ if(!mysqli_query($link, $query))
   error_log($query);
   error_log(mysqli_error($link));
 }
+//--- Cover und Backdrop loeschen
+$query = "SELECT id, coverhash, backdrophash FROM t_Film WHERE id = " . $id;
+  error_log($query);
+$result=mysqli_query($link, $query);
+
+if(!mysqli_query($link, $query))
+{
+  error_log($query);
+  error_log(mysqli_error($link));
+}
+
+while ($row = mysqli_fetch_array($result)) 
+{
+  error_log($row[1]);
+  error_log($row[2]);
+
+  $poster = "Pictures/Poster/" . $row[1];
+  error_log($poster);
+
+  unlink("Pictures/Poster/" . $row[1]);
+  unlink("Pictures/Backdrop/" . $row[2]);
+              
+}
+
 
 //--- Film loeschen ---
 $query= "DELETE FROM t_Film ";

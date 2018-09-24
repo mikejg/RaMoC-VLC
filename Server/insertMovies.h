@@ -75,5 +75,8 @@ class InsertMovies : public QThread
     void sig_ProgressBar_Hide();
     void sig_ProgressBar_SetRange(int, int);
     void sig_ProgressBar_SetValue(int);
+
+ public slots:
+   void onInsertMovie(Movie);
 };
 #endif

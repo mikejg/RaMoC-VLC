@@ -473,6 +473,7 @@ void VLCProcess::playStream(QString str)
   currentFile = str;
   writeToVLCSocket("clear");
   writeToVLCSocket("add " + str);
+  QTimer::singleShot(1000, this, SLOT(onVLCGetVolume()));
 
 //  sig_SetPlayed(currentFile);
 //  QTimer::singleShot(500, this, SLOT(onVLCSubtitle()));

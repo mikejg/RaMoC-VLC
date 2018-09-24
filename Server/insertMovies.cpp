@@ -13,13 +13,14 @@ void InsertMovies::run()
   strList_MovieFiles    = new QStringList();
   strList_TVShowFiles    = new QStringList();
   strList_MP3Files    = new QStringList();
- 
+
   database = new DataBase(0, "Thread_Connection");
-  connect(database, SIGNAL(sig_NewInfo(QString)), this, SIGNAL(sig_NewInfo(QString)));
+  connect(database, SIGNAL(sig_NewInfo(QString)), this,
+            SIGNAL(sig_NewInfo(QString)));
 
   strList_Path.clear();
   //strList_Path.append("/media");
- // strList_Path.append("/mnt/smb/Archive");
+  strList_Path.append("/mnt/smb/Archive");
   //strList_Path.append("/mnt/smb/Music");
   strList_Path.append("/mnt/smb/TVShow");
   strList_Path.append("/mnt/smb/Movie");
@@ -343,6 +344,9 @@ void InsertMovies::eval_TVQuery()
 
 bool InsertMovies::load_Details()
 {
+  QString funcInfo = Q_FUNC_INFO;
+  Log::error(funcInfo + " start");
+
   //Details nachladen
   tmdbUrl = "https://api.themoviedb.org/3/movie/" + movie.tmdb_ID;
   if(movie.serie == "1")
@@ -501,7 +505,7 @@ bool InsertMovies::load_Details()
 
 void InsertMovies::tmdbQuery(QString url, QString* str, QVariantMap* res)
 {
-  //Log::error(Q_FUNC_INFO);
+  Log::error(Q_FUNC_INFO);
   QVariantMap map;
   *str = "NoError";
 
@@ -556,7 +560,32 @@ void InsertMovies::fskQuery(QString tmdb, QString* str)
   return;
 }
 
+void InsertMovies::onInsertMovie(Movie m)
+{
+  networkAccessManager  = new QNetworkAccessManager();
+  eventLoop             = new QEventLoop();
+  database = new DataBase(0, "Thread_Connection");
+  connect(database, SIGNAL(sig_NewInfo(QString)), this,
+            SIGNAL(sig_NewInfo(QString)));
+  movie = m;
+  Log::error(Q_FUNC_INFO);
+  Log::error("Title: " + movie.title);
+  Log::error("Path: " + movie.file_Path);
+  Log::error("ID: " + movie.tmdb_ID);
+  fskQuery(movie.tmdb_ID, &movie.fsk);
+  Log::error("FSK: " + movie.fsk + " tmdb: " + movie.tmdb_ID);
 
+
+        if(load_Details())
+        {
+          Log::error("load_Details erfolgreic");
+          database->insertMovie(movie);
+        }
+        
+  delete database;
+  delete networkAccessManager;
+  delete eventLoop;
+}
 
 //void InsertMovies::check_NewMovie()
 //{

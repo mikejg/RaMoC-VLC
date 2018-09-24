@@ -8,6 +8,8 @@ Player::Player(QObject *parent) : QObject(parent)
 
     mediaObject = new Phonon::MediaObject(this);
     audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+    isRadio = false;
+
     Phonon::createPath(mediaObject, audioOutput);
     connect(vlcProcess, SIGNAL(sig_NewState(quint8)), 
             this,       SIGNAL(sig_NewState(quint8)));
@@ -18,6 +20,8 @@ Player::Player(QObject *parent) : QObject(parent)
 
     connect(mediaObject, SIGNAL(finished()),
             this,        SLOT(onTrackFinished()));
+    connect(mediaObject, SIGNAL(metaDataChanged()),
+            this,        SLOT(onMetaDataChanged()));
 
     connect(omxProcess, SIGNAL(sig_NewState(quint8)), 
             this,       SIGNAL(sig_NewState(quint8)));
@@ -33,6 +37,11 @@ Player::Player(QObject *parent) : QObject(parent)
 Player::~Player()
 {
 
+}
+
+void Player::unUsed()
+{
+  Log::player("Unused");
 }
 
 QString Player::genJsonTracks(QList<Track> tracklist)
@@ -104,6 +113,28 @@ void Player::onIncSpeed()
   vlcProcess->faster();
 }
 
+void Player::onMetaDataChanged()
+{
+  QMultiMap<QString, QString> map = mediaObject->metaData();
+  QStringList strList;
+  QString strValue;
+
+  strList = map.values("ARTIST");
+  foreach(strValue, strList)
+  {
+    track.artist = strValue;
+    Log::player("ARTIST: " + strValue);
+  }
+
+  strList = map.values("TITLE");
+  foreach(strValue, strList)
+  {
+    track.title = strValue;
+    Log::player("TITLE: " + strValue);
+  }
+  sig_PlayingTrack(track);
+}
+
 void Player::onMinutesBackward()
 {
   vlcProcess->minutesBackward();
@@ -138,6 +169,11 @@ void Player::onPlayStream(QString str)
 void Player::onPlayTrack(int tracknumber)
 {
   Log::player(Q_FUNC_INFO);
+  if(isRadio)
+  {
+    onStop();
+    return;
+  }
 
   if(tracknumber >= playlist.size())
   {
@@ -168,11 +204,19 @@ void Player::onPlayTrack(int tracknumber)
   mediaObject->setCurrentSource(Phonon::MediaSource(
                                       playlist.at(tracknumber).path));
   mediaObject->play();
-  sig_PlayingTrack(track);
+//  sig_PlayingTrack(track);
   sig_WriteData("104|" + track.playlistPos, true);
 
 //musicObject->setCurrentSource(Phonon::MediaSource("http://www.schwarze-welle.de:7500"));
 //      musicObject->setCurrentSource(Phonon::MediaSource("http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3"));
+}
+
+void Player::onPlayRadio(QString str)
+{
+  Log::player(Q_FUNC_INFO);
+  isRadio = true;
+  mediaObject->setCurrentSource(Phonon::MediaSource(str));
+  mediaObject->play();
 }
 
 void Player::onPlayYoutube(QString str)
@@ -219,6 +263,7 @@ void Player::onStop()
   vlcProcess->stop(); 
   //omxProcess->stop();
   mediaObject->stop();
+  isRadio = false;
   sig_VLCStopped();
 }
 

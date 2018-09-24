@@ -45,8 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(insertMovies, SIGNAL(sig_ProgressBar_SetValue(int)),
             progressBar, SLOT(setValue(int)));
 
-    connect(server, SIGNAL(sig_InsertMovie(QString, QString)), 
-            this,   SLOT(onInsertMovie(QString, QString)));
+    connect(server, SIGNAL(sig_InsertMovie(Movie)), 
+            insertMovies, SLOT(onInsertMovie(Movie)));
+
     connect(server, SIGNAL(sig_InsertMovies()),      
             this,   SLOT(onInsertMovies()));
 
@@ -93,6 +94,8 @@ MainWindow::MainWindow(QWidget *parent) :
             player, SLOT(onPlay(QString)));
     connect(server,       SIGNAL(sig_PlayStream(QString)),
             player, SLOT(onPlayStream(QString)));
+    connect(server,       SIGNAL(sig_PlayRadio(QString)),
+            player, SLOT(onPlayRadio(QString)));
     connect(server,       SIGNAL(sig_PlayTrack(int)),
             player, SLOT(onPlayTrack(int)));
     connect(server,       SIGNAL(sig_PlayYoutube(QString)),

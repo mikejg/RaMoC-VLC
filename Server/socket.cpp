@@ -17,6 +17,8 @@ Socket::Socket(QTcpSocket* ts, QObject* parent) : QObject(parent)
 
   connect(tcpSocket, SIGNAL(disconnected()),  this, SLOT(onDisconnected()));
   connect(tcpSocket, SIGNAL(readyRead()),     this, SLOT(onReadData()));
+
+  isPlayStream = true;
 }
 
 Socket::~Socket()
@@ -46,6 +48,46 @@ void Socket::handleGetSettings()
     writeData(str_Settings, true);
 }
 
+void Socket::handleInsertMovie()
+{
+  Log::info(Q_FUNC_INFO);
+  QFileInfo info(strList_Data.at(1));
+  QFile file(strList_Data.at(1));
+  QDir dir = info.dir();
+  QString tmp = dir.absolutePath() + "/" + strList_Data.at(3) + "." + info.suffix();
+
+  Movie movie;
+  movie.title = strList_Data.at(3);
+  movie.serie = "0";
+  movie.fsk = "0";
+  movie.file_Path = tmp;
+  movie.tmdb_ID = strList_Data.at(2);
+  movie.list_Person.clear();
+  movie.strList_Genres.clear();
+  if(tmp.contains("Archive"))
+  {
+    movie.archive = "1";
+  }
+  else
+  {
+    movie.archive = "0";
+  }
+
+  if(tmp == info.absoluteFilePath())
+  {
+    sig_InsertMovie(movie);
+    return;
+  }
+
+  if(!file.rename(tmp))
+  {
+    Log::error("Fehler beim umbenennen" + tmp);
+    return;
+  }
+
+  sig_InsertMovie(movie);
+}
+
 void Socket::handleNewTVChannel(QString str)
 {
   QStringList strList = str.split("\n");
@@ -54,9 +96,11 @@ void Socket::handleNewTVChannel(QString str)
     QString string = strList.at(0);
     string = string.remove("\n");
     QStringList list = string.split("|");
-    if(list.size() == 3)
+    if(list.size() == 3 && isPlayStream)
     {
+      isPlayStream = false;
       sig_PlayStream(list.at(1));
+      QTimer::singleShot(1000, this, SLOT(onFreePlayStream()));
     }
   }
 }
@@ -166,7 +210,8 @@ void Socket::onReadData()
 
   if(string.startsWith(insertMovie))
     //connected with MainWindow::onInsertMovie(QString, QString);
-    sig_InsertMovie(strList_Data.at(1), strList_Data.at(3));
+    //sig_InsertMovie(strList_Data.at(1), strList_Data.at(3));
+    handleInsertMovie();
 
   if(string.startsWith(minutesBackward))
     sig_MinutesBackward();
@@ -193,6 +238,10 @@ void Socket::onReadData()
   if(string.startsWith(playYoutube))
     //connected with PlayerWindow::onPlayYoutube(QString)
     sig_PlayYoutube(strList_Data.at(1));
+
+  if(string.startsWith(playRadio))
+    //connected with Player::onPlayRadio(QString)
+    sig_PlayRadio(strList_Data.at(1));
 
   if(string.startsWith(restoreMovie))
     //connected with DataBase::onRestore(QString);

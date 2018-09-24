@@ -52,4 +52,5 @@ namespace constants
   const QString finishID3Tag      = "114";
   const QString mute              = "115";
   const QString bell              = "116";
+  const QString playRadio         = "117";
 }

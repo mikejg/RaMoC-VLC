@@ -54,7 +54,8 @@ HEADERS  += constants.h\
             socket.h\
             player.h\
             omx_process.h\
-            fileCopyThread.h
+            fileCopyThread.h\
+            structs.h
 
 FORMS    += mainwindow.ui
 

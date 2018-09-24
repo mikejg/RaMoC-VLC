@@ -42,7 +42,7 @@ signals:
   void sig_GetUnsortedFiles();
   void sig_IncSpeed();
   void sig_GetTracks(QString, QString);
-  void sig_InsertMovie(QString, QString);
+  void sig_InsertMovie(Movie);
   void sig_InsertMovies();
   void sig_MinutesBackward();
   void sig_MinutesForward();
@@ -52,6 +52,7 @@ signals:
   void sig_PlayedSet();
   void sig_PlayStream(QString);
   void sig_PlayTrack(int);
+  void sig_PlayRadio(QString);
   void sig_PlayYoutube(QString);
   void sig_RestoreMovie(QString);
   void sig_SendArtistAlben(QStringList);

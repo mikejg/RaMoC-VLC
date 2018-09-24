@@ -7,9 +7,13 @@
 #include <QSettings>
 #include <QHostAddress>
 #include <QDataStream>
+#include <QFileInfo>
+#include <QDir>
+#include <QTimer>
 
 #include "log.h"
 #include "constants.h"
+#include "structs.h"
 
 using namespace constants;
 
@@ -33,8 +37,10 @@ class Socket : public QObject
 
     QStringList strList_Data;
     QStringList stringList_ArtistAlben;
-
+    
+    bool isPlayStream;
     void handleGetSettings();
+    void handleInsertMovie();
     void handleNewTVChannel(QString);
     void handleNextArtistAlben();
     void handlePlay(QStringList);
@@ -61,13 +67,14 @@ signals:
     void sig_GetTracks(QString, QString);
     void sig_GetUnsortedFiles();
     void sig_IncSpeed();
-    void sig_InsertMovie(QString, QString);
+    void sig_InsertMovie(Movie);
     void sig_InsertMovies();
     void sig_MinutesBackward();
     void sig_MinutesForward();
     void sig_Mute();
     void sig_Play(QString);
     void sig_PlayStream(QString);
+    void sig_PlayRadio(QString);
     void sig_PlayTrack(int);
     void sig_PlayYoutube(QString);
     void sig_RestoreMovie(QString);
@@ -82,6 +89,7 @@ signals:
 
 public slots:
     void onDisconnected();
+    void onFreePlayStream() { isPlayStream = true; }
     void onNewState(quint8);
     void onPlayedSet();
     void onReadData();
