@@ -666,7 +666,7 @@ QList<Movie> DataBase::getAllTVShow()
   QEventLoop loop;
   QList<QVariant> result;
   QList<Movie> returnList;
-  reply = networkAccessManager->get(QNetworkRequest(QUrl("http://localhost/getTVShowList.php")));
+  reply = networkAccessManager->get(QNetworkRequest(QUrl("http://localhost/getAllTVShowList.php")));
   connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
 
