@@ -174,6 +174,14 @@ void DataBase::insertMovie(Movie movie)
         return;
   }
 
+  if(movie.file_Path.contains("Ä"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("Ä", "Ae");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
+
   if(movie.file_Path.contains("ö"))
   {
     QFile file(movie.file_Path);
@@ -181,6 +189,15 @@ void DataBase::insertMovie(Movie movie)
     if(!file.rename(movie.file_Path))
         return;
   }
+
+  if(movie.file_Path.contains("Ö"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("Ö", "Oe");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
+
   if(movie.file_Path.contains("ü"))
   {
     QFile file(movie.file_Path);
@@ -188,6 +205,15 @@ void DataBase::insertMovie(Movie movie)
     if(!file.rename(movie.file_Path))
         return;
   }
+
+  if(movie.file_Path.contains("Ü"))
+  {
+    QFile file(movie.file_Path);
+    movie.file_Path = movie.file_Path.replace("Ü", "Ue");
+    if(!file.rename(movie.file_Path))
+        return;
+  }
+
   if(movie.file_Path.contains("ß"))
   {
     QFile file(movie.file_Path);
