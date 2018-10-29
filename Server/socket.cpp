@@ -79,10 +79,10 @@ void Socket::handleInsertMovie()
     return;
   }
 
-  if(!file.rename(tmp))
+  if(!DataBase::renameFile(info.absoluteFilePath(), tmp))
   {
-    Log::error("Fehler beim umbenennen" + tmp);
-    return;
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
   }
 
   sig_InsertMovie(movie);

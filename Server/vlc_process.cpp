@@ -417,7 +417,7 @@ void VLCProcess::parseTime(QString str)
   {
      Log::player("Length: " + QString("%1").arg(t));
      sig_WriteData("034|" + QString("%1").arg(t),true);
-     getTimeTimer.start(2000);
+     //getTimeTimer.start(2000);
   }
 
 //  if(isGetVolume)

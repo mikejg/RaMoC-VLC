@@ -149,6 +149,29 @@ void DataBase::insertEpisode(Movie episode)
    loop.exec();
    reply->deleteLater();
 }
+bool DataBase::renameFile(QString oldName, QString newName)
+{
+  Log::db(oldName);
+  Log::db(newName);
+
+  oldName = oldName.replace(" ", "\\ ");
+  oldName = oldName.replace(":", "\\:");
+  newName = newName.replace(" ", "\\ ");
+  newName = newName.replace(":", "\\:");
+  
+  QString execString;
+  execString = "mv " + oldName + " " + newName;
+
+  Log::db(execString);
+  int errorCode = system(execString.toUtf8().data());
+//  Log::db(QString("ErrorCode: %1").arg(errorCode));
+  if(errorCode == 0) 
+  {
+    return true;
+  }
+
+  return false;
+}
 
 void DataBase::insertMovie(Movie movie)
 {
@@ -162,65 +185,108 @@ void DataBase::insertMovie(Movie movie)
   QEventLoop loop;
 
   QString id_Actor;
+  QString newFilePath;
+  QString systemString;
+
   QHttpMultiPart *multiPart_Actor;
 
-//  if(movie.file_Path.contains(":"))
-//      trimmFilePath(movie.file_Path, ":");
   if(movie.file_Path.contains("ä"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("ä", "ae");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("ä", "ae");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("Ä"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("Ä", "Ae");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("Ä", "Ae");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("ö"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("ö", "oe");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("ö", "oe");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("Ö"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("Ö", "Oe");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("Ö", "Oe");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("ü"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("ü", "ue");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("ü", "ue");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("Ü"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("Ü", "Ue");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("Ü", "Ue");
+
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
 
   if(movie.file_Path.contains("ß"))
   {
     QFile file(movie.file_Path);
-    movie.file_Path = movie.file_Path.replace("ß", "ss");
-    if(!file.rename(movie.file_Path))
-        return;
+    newFilePath = movie.file_Path;
+    newFilePath = newFilePath.replace("ß", "ss");
+    if(!renameFile(movie.file_Path, newFilePath))
+    {
+      Log::error("Fehler beim umbenennen" + movie.file_Path);
+      return;
+    }
+  movie.file_Path = newFilePath;
   }
+
   if(movie.file_Path.contains("&"))
     movie.file_Path = movie.file_Path.replace("&", "%26");
 

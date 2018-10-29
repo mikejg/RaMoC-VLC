@@ -14,6 +14,7 @@
 #include "log.h"
 #include "constants.h"
 #include "structs.h"
+#include "database.h"
 
 using namespace constants;
 

@@ -75,6 +75,7 @@ class DataBase : public QObject
     void          updateTitle(Track track, QString title);
     void          updateAlbum(Track track, QString album);
     void          updateArtist(Track track, QString artist);
+    static bool          renameFile(QString oldName, QString newName);
 
     TagLib::String Qt4StringToString(QString s) 
     {return TagLib::String(s.toLatin1().data(),TagLib::String::Latin1);}
